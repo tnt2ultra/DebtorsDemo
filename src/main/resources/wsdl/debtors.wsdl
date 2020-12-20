@@ -1,0 +1,976 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="MessageService"
+	targetNamespace="http://tempuri.org/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+	xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+	xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+	xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:tns="http://tempuri.org/"
+	xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+	<wsp:Policy wsu:Id="BasicHttpBinding_IMessageService_policy">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sp:TransportBinding
+					xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+					<wsp:Policy>
+						<sp:TransportToken>
+							<wsp:Policy>
+								<sp:HttpsToken RequireClientCertificate="false" />
+							</wsp:Policy>
+						</sp:TransportToken>
+						<sp:AlgorithmSuite>
+							<wsp:Policy>
+								<sp:Basic256 />
+							</wsp:Policy>
+						</sp:AlgorithmSuite>
+						<sp:Layout>
+							<wsp:Policy>
+								<sp:Strict />
+							</wsp:Policy>
+						</sp:Layout>
+					</wsp:Policy>
+				</sp:TransportBinding>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:types>
+		<xs:schema elementFormDefault="qualified"
+			targetNamespace="http://tempuri.org/"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="GetMessageIds">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startDate" type="xs:dateTime" />
+						<xs:element minOccurs="1" maxOccurs="1" name="endDate"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMessageIdsResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetMessageIdsResult" type="tns:ArrayOfInt" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="ArrayOfInt">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="int" type="xs:int" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="GetMessageContent">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="id"
+							type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetMessageContentResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetMessageContentResult" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetTradeMessageContent">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="idTradeMessage" type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetTradeMessageContentResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetTradeMessageContentResult" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetTradeMessages">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startFrom" type="xs:dateTime" />
+						<xs:element minOccurs="1" maxOccurs="1" name="endTo"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetTradeMessagesResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetTradeMessagesResult" type="tns:ArrayOfTradePlace" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="ArrayOfTradePlace">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="TradePlace" nillable="true" type="tns:TradePlace" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TradePlace">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="TradeList"
+						type="tns:ArrayOfTrade" />
+				</xs:sequence>
+				<xs:attribute name="INN" type="xs:string" />
+				<xs:attribute name="Name" type="xs:string" />
+				<xs:attribute name="Site" type="xs:string" />
+				<xs:attribute name="OwnerName" type="xs:string" />
+			</xs:complexType>
+			<xs:complexType name="ArrayOfTrade">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="Trade" nillable="true" type="tns:Trade" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="Trade">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="MessageList" type="tns:ArrayOfTradeMessage" />
+				</xs:sequence>
+				<xs:attribute name="ID_External" type="xs:string" />
+				<xs:attribute name="ID_EFRSB" type="xs:int"
+					use="required" />
+			</xs:complexType>
+			<xs:complexType name="ArrayOfTradeMessage">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="TradeMessage" nillable="true" type="tns:TradeMessage" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="TradeMessage">
+				<xs:attribute name="ID" type="xs:int" use="required" />
+			</xs:complexType>
+			<xs:element name="GetTradeMessagesByTrade">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startFrom" type="xs:dateTime" />
+						<xs:element minOccurs="1" maxOccurs="1" name="endTo"
+							nillable="true" type="xs:dateTime" />
+						<xs:element minOccurs="0" maxOccurs="1" name="id"
+							type="xs:string" />
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="tradePlaceInn" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetTradeMessagesByTradeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetTradeMessagesByTradeResult" type="tns:ArrayOfTradePlace" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetArbitrManagerRegister">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="date"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetArbitrManagerRegisterResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetArbitrManagerRegisterResult" type="tns:AMList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="AMList">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="AMList"
+						type="tns:ArrayOfArbitrManagerRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="ArrayOfArbitrManagerRegisterItem">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="ArbitrManager" nillable="true"
+						type="tns:ArbitrManagerRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ArbitrManagerRegisterItem">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="DateAffiliations" type="tns:ArrayOfDateAffiliation" />
+				</xs:sequence>
+				<xs:attribute name="ArbitrManagerID" type="xs:string" />
+				<xs:attribute name="FirstName" type="xs:string" />
+				<xs:attribute name="MiddleName" type="xs:string" />
+				<xs:attribute name="LastName" type="xs:string" />
+				<xs:attribute name="RegNum" type="xs:string" />
+				<xs:attribute name="INN" type="xs:string" />
+				<xs:attribute name="OGRNIP" type="xs:string" />
+				<xs:attribute name="SNILS" type="xs:string" />
+				<xs:attribute name="SRORegNum" type="xs:string" />
+				<xs:attribute name="DateLastModif" type="xs:dateTime"
+					use="required" />
+				<xs:attribute name="Region" type="xs:string" />
+				<xs:attribute name="DateReg" type="xs:dateTime" />
+				<xs:attribute name="SRORegDate" type="xs:dateTime" />
+				<xs:attribute name="DateDelete" type="xs:dateTime" />
+			</xs:complexType>
+			<xs:complexType name="ArrayOfDateAffiliation">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="DateAffiliation" nillable="true" type="tns:DateAffiliation" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DateAffiliation">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="DateInclude" type="xs:dateTime" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="DateExclude" nillable="true" type="xs:dateTime" />
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="CauseExclude" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="GetDebtorRegister">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="date"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetDebtorRegisterResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetDebtorRegisterResult" type="tns:DebtorList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="DebtorList">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="DebtorList" type="tns:ArrayOfChoice1" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ArrayOfChoice1">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="DebtorPerson" nillable="true" type="tns:DebtorPerson" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="DebtorCompany" nillable="true" type="tns:DebtorCompany" />
+				</xs:choice>
+			</xs:complexType>
+			<xs:complexType name="DebtorPerson">
+				<xs:complexContent mixed="false">
+					<xs:extension base="tns:DebtorRegisterItem">
+						<xs:sequence>
+							<xs:element minOccurs="0" maxOccurs="1"
+								name="NameHistory" type="tns:ArrayOfString" />
+						</xs:sequence>
+						<xs:attribute name="LastName" type="xs:string" />
+						<xs:attribute name="FirstName" type="xs:string" />
+						<xs:attribute name="MiddleName" type="xs:string" />
+						<xs:attribute name="OGRNIP" type="xs:string" />
+						<xs:attribute name="Birthdate" type="xs:string" />
+						<xs:attribute name="Birthplace" type="xs:string" />
+						<xs:attribute name="SNILS" type="xs:string" />
+						<xs:attribute name="Address" type="xs:string" />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="DebtorRegisterItem"
+				abstract="true">
+				<xs:sequence>
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="LastMessageDate" nillable="true" type="xs:dateTime" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="LastReportDate" nillable="true" type="xs:dateTime" />
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="LegalCaseList" type="tns:ArrayOfLegalCaseInfo" />
+				</xs:sequence>
+				<xs:attribute name="Category" type="xs:string" />
+				<xs:attribute name="CategoryCode" type="xs:string" />
+				<xs:attribute name="Region" type="xs:string" />
+				<xs:attribute name="DateLastModif" type="xs:dateTime"
+					use="required" />
+				<xs:attribute name="INN" type="xs:string" />
+				<xs:attribute name="BankruptId" type="xs:int"
+					use="required" />
+				<xs:attribute name="Guid" type="xs:string" />
+			</xs:complexType>
+			<xs:complexType name="ArrayOfLegalCaseInfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="LegalCaseInfo" nillable="true" type="tns:LegalCaseInfo" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="LegalCaseInfo">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="Number"
+						type="xs:string" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="DateCreate" nillable="true" type="xs:dateTime" />
+					<xs:element minOccurs="0" maxOccurs="1" name="Court"
+						type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="ApplicantType" type="xs:string" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="IsApplicantCreditOrg" nillable="true" type="xs:boolean" />
+					<xs:element minOccurs="1" maxOccurs="1"
+						name="IsLiabilitySecured" nillable="true" type="xs:boolean" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="DebtorCompany">
+				<xs:complexContent mixed="false">
+					<xs:extension base="tns:DebtorRegisterItem">
+						<xs:attribute name="FullName" type="xs:string" />
+						<xs:attribute name="ShortName" type="xs:string" />
+						<xs:attribute name="OGRN" type="xs:string" />
+						<xs:attribute name="LegalAddress" type="xs:string" />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ArrayOfString">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="NameHistoryItem" nillable="true" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="GetCompanyTradeOrganizerRegister">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="date"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetCompanyTradeOrganizerRegisterResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetCompanyTradeOrganizerRegisterResult"
+							type="tns:TradeOrganizerList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="TradeOrganizerList">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1"
+						name="TradeOrganizerList"
+						type="tns:ArrayOfCompanyTradeOrganizerRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="ArrayOfCompanyTradeOrganizerRegisterItem">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="TradeOrganizer" nillable="true"
+						type="tns:CompanyTradeOrganizerRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType
+				name="CompanyTradeOrganizerRegisterItem">
+				<xs:attribute name="FullName" type="xs:string" />
+				<xs:attribute name="ShortName" type="xs:string" />
+				<xs:attribute name="INN" type="xs:string" />
+				<xs:attribute name="OGRN" type="xs:string" />
+				<xs:attribute name="DateLastModif" type="xs:dateTime"
+					use="required" />
+			</xs:complexType>
+			<xs:element name="GetSroRegister">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="date"
+							nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetSroRegisterResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetSroRegisterResult" type="tns:SROList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name="SROList">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="SROList"
+						type="tns:ArrayOfSroRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ArrayOfSroRegisterItem">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="SRO" nillable="true" type="tns:SroRegisterItem" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="SroRegisterItem">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="1" name="AMList"
+						type="tns:ArrayOfArbitrManagerRegisterItem" />
+				</xs:sequence>
+				<xs:attribute name="SROID" type="xs:int" use="required" />
+				<xs:attribute name="FullName" type="xs:string" />
+				<xs:attribute name="RegNum" type="xs:string" />
+				<xs:attribute name="DateReg" type="xs:dateTime"
+					use="required" />
+				<xs:attribute name="INN" type="xs:string" />
+				<xs:attribute name="UrAdress" type="xs:string" />
+				<xs:attribute name="Phone" type="xs:string" />
+				<xs:attribute name="DateExclude" type="xs:dateTime" />
+				<xs:attribute name="CauseExclude" type="xs:string" />
+				<xs:attribute name="DateLastModif" type="xs:dateTime"
+					use="required" />
+			</xs:complexType>
+			<xs:element name="GetDebtorByIdBankrupt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="idBankrupt" type="xs:int" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetDebtorByIdBankruptResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetDebtorByIdBankruptResult" type="tns:DebtorRegisterItem" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="GetDebtorsByLastPublicationPeriod">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startDate" type="xs:dateTime" />
+						<xs:element minOccurs="1" maxOccurs="1" name="endDate"
+							type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetDebtorsByLastPublicationPeriodResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetDebtorsByLastPublicationPeriodResult"
+							type="tns:DebtorList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetDebtorMessagesContentForPeriodByIdBankrupt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="idBankrupt" type="xs:int" />
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startDate" nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetDebtorMessagesContentForPeriodByIdBankruptResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetDebtorMessagesContentForPeriodByIdBankruptResult"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetDebtorReportsContentForPeriodByIdBankrupt">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="idBankrupt" type="xs:int" />
+						<xs:element minOccurs="1" maxOccurs="1"
+							name="startDate" nillable="true" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element
+				name="GetDebtorReportsContentForPeriodByIdBankruptResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="GetDebtorReportsContentForPeriodByIdBankruptResult"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SearchDebtorByCode">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="1" maxOccurs="1" name="codeType"
+							nillable="true" type="tns:DebtorCodeType" />
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="codeValue" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:simpleType name="DebtorCodeType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="CompanyInn" />
+					<xs:enumeration value="PersonInn" />
+					<xs:enumeration value="Ogrn" />
+					<xs:enumeration value="Ogrnip" />
+					<xs:enumeration value="Snils" />
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:element name="SearchDebtorByCodeResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="1"
+							name="SearchDebtorByCodeResult" type="tns:DebtorList" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message
+		name="IMessageService_GetMessageIds_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetMessageIds" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetMessageIds_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetMessageIdsResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetMessageContent_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetMessageContent" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetMessageContent_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetMessageContentResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessageContent_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetTradeMessageContent" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessageContent_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetTradeMessageContentResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessages_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetTradeMessages" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessages_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetTradeMessagesResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessagesByTrade_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetTradeMessagesByTrade" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetTradeMessagesByTrade_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetTradeMessagesByTradeResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetArbitrManagerRegister_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetArbitrManagerRegister" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetArbitrManagerRegister_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetArbitrManagerRegisterResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorRegister_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetDebtorRegister" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorRegister_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorRegisterResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetCompanyTradeOrganizerRegister_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetCompanyTradeOrganizerRegister" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetCompanyTradeOrganizerRegister_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetCompanyTradeOrganizerRegisterResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetSroRegister_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetSroRegister" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetSroRegister_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetSroRegisterResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorByIdBankrupt_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorByIdBankrupt" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorByIdBankrupt_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorByIdBankruptResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorsByLastPublicationPeriod_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorsByLastPublicationPeriod" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorsByLastPublicationPeriod_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorsByLastPublicationPeriodResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorMessagesContentForPeriodByIdBankrupt_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorMessagesContentForPeriodByIdBankrupt" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorMessagesContentForPeriodByIdBankrupt_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorMessagesContentForPeriodByIdBankruptResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorReportsContentForPeriodByIdBankrupt_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorReportsContentForPeriodByIdBankrupt" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_GetDebtorReportsContentForPeriodByIdBankrupt_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:GetDebtorReportsContentForPeriodByIdBankruptResponse" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_SearchDebtorByCode_InputMessage">
+		<wsdl:part name="parameters"
+			element="tns:SearchDebtorByCode" />
+	</wsdl:message>
+	<wsdl:message
+		name="IMessageService_SearchDebtorByCode_OutputMessage">
+		<wsdl:part name="parameters"
+			element="tns:SearchDebtorByCodeResponse" />
+	</wsdl:message>
+	<wsdl:portType name="IMessageService">
+		<wsdl:operation name="GetMessageIds">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetMessageIds"
+				message="tns:IMessageService_GetMessageIds_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetMessageIdsResponse"
+				message="tns:IMessageService_GetMessageIds_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetMessageContent">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetMessageContent"
+				message="tns:IMessageService_GetMessageContent_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetMessageContentResponse"
+				message="tns:IMessageService_GetMessageContent_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessageContent">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessageContent"
+				message="tns:IMessageService_GetTradeMessageContent_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessageContentResponse"
+				message="tns:IMessageService_GetTradeMessageContent_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessages">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessages"
+				message="tns:IMessageService_GetTradeMessages_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessagesResponse"
+				message="tns:IMessageService_GetTradeMessages_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessagesByTrade">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessagesByTrade"
+				message="tns:IMessageService_GetTradeMessagesByTrade_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetTradeMessagesByTradeResponse"
+				message="tns:IMessageService_GetTradeMessagesByTrade_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetArbitrManagerRegister">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetArbitrManagerRegister"
+				message="tns:IMessageService_GetArbitrManagerRegister_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetArbitrManagerRegisterResponse"
+				message="tns:IMessageService_GetArbitrManagerRegister_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetDebtorRegister">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorRegister"
+				message="tns:IMessageService_GetDebtorRegister_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorRegisterResponse"
+				message="tns:IMessageService_GetDebtorRegister_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetCompanyTradeOrganizerRegister">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetCompanyTradeOrganizerRegister"
+				message="tns:IMessageService_GetCompanyTradeOrganizerRegister_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetCompanyTradeOrganizerRegisterResponse"
+				message="tns:IMessageService_GetCompanyTradeOrganizerRegister_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetSroRegister">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetSroRegister"
+				message="tns:IMessageService_GetSroRegister_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetSroRegisterResponse"
+				message="tns:IMessageService_GetSroRegister_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="GetDebtorByIdBankrupt">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorByIdBankrupt"
+				message="tns:IMessageService_GetDebtorByIdBankrupt_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorByIdBankruptResponse"
+				message="tns:IMessageService_GetDebtorByIdBankrupt_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorsByLastPublicationPeriod">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorsByLastPublicationPeriod"
+				message="tns:IMessageService_GetDebtorsByLastPublicationPeriod_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorsByLastPublicationPeriodResponse"
+				message="tns:IMessageService_GetDebtorsByLastPublicationPeriod_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorMessagesContentForPeriodByIdBankrupt">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorMessagesContentForPeriodByIdBankrupt"
+				message="tns:IMessageService_GetDebtorMessagesContentForPeriodByIdBankrupt_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorMessagesContentForPeriodByIdBankruptResponse"
+				message="tns:IMessageService_GetDebtorMessagesContentForPeriodByIdBankrupt_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorReportsContentForPeriodByIdBankrupt">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorReportsContentForPeriodByIdBankrupt"
+				message="tns:IMessageService_GetDebtorReportsContentForPeriodByIdBankrupt_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/GetDebtorReportsContentForPeriodByIdBankruptResponse"
+				message="tns:IMessageService_GetDebtorReportsContentForPeriodByIdBankrupt_OutputMessage" />
+		</wsdl:operation>
+		<wsdl:operation name="SearchDebtorByCode">
+			<wsdl:input
+				wsaw:Action="http://tempuri.org/IMessageService/SearchDebtorByCode"
+				message="tns:IMessageService_SearchDebtorByCode_InputMessage" />
+			<wsdl:output
+				wsaw:Action="http://tempuri.org/IMessageService/SearchDebtorByCodeResponse"
+				message="tns:IMessageService_SearchDebtorByCode_OutputMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BasicHttpBinding_IMessageService"
+		type="tns:IMessageService">
+		<wsp:PolicyReference
+			URI="#BasicHttpBinding_IMessageService_policy" />
+		<soap:binding
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="GetMessageIds">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetMessageIds"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetMessageContent">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetMessageContent"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessageContent">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetTradeMessageContent"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessages">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetTradeMessages"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTradeMessagesByTrade">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetTradeMessagesByTrade"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetArbitrManagerRegister">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetArbitrManagerRegister"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebtorRegister">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetDebtorRegister"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetCompanyTradeOrganizerRegister">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetCompanyTradeOrganizerRegister"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetSroRegister">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetSroRegister"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetDebtorByIdBankrupt">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetDebtorByIdBankrupt"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorsByLastPublicationPeriod">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetDebtorsByLastPublicationPeriod"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorMessagesContentForPeriodByIdBankrupt">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetDebtorMessagesContentForPeriodByIdBankrupt"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation
+			name="GetDebtorReportsContentForPeriodByIdBankrupt">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/GetDebtorReportsContentForPeriodByIdBankrupt"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SearchDebtorByCode">
+			<soap:operation
+				soapAction="http://tempuri.org/IMessageService/SearchDebtorByCode"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="MessageService">
+		<wsdl:port name="BasicHttpBinding_IMessageService"
+			binding="tns:BasicHttpBinding_IMessageService">
+			<soap:address
+				location="https://services.fedresurs.ru/Bankruptcy/MessageServiceDemo/WebService.svc" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
