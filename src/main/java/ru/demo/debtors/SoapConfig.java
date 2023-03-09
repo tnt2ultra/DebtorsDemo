@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 
 @Configuration
@@ -22,13 +21,6 @@ public class SoapConfig {
 		HttpComponentsMessageSender messageSender = new HttpComponentsMessageSender();
 		messageSender.setAuthScope(AuthScope.ANY);
 		messageSender.setCredentials(new UsernamePasswordCredentials("demowebuser", "Ax!761BN"));
-		
-		System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
-		System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dump", "true");
-		System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
-		System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
-		System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dumpTreshold", "999999");
-		
 		return messageSender;
 	}
 
@@ -38,17 +30,6 @@ public class SoapConfig {
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
 		jaxb2Marshaller.setPackagesToScan("ru.demo.debtors.soap.bindings");
 		return jaxb2Marshaller;
-	}
-	
-	@Bean
-	public CommonsRequestLoggingFilter requestLoggingFilter() {
-		log.info("requestLoggingFilter started");
-	    CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
-	    loggingFilter.setIncludeClientInfo(true);
-	    loggingFilter.setIncludeQueryString(true);
-	    loggingFilter.setIncludePayload(true);
-	    loggingFilter.setMaxPayloadLength(64000);
-	    return loggingFilter;
 	}
 
 }
